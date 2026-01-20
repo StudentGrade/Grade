@@ -222,8 +222,8 @@
 {#if synergyCourse}
 	<div
 		class={[
-			'bg-background sticky top-10 z-10 transition-all md:top-0',
-			!pinChart && 'md:bg-transparent'
+			'bg-background z-10 transition-all',
+			pinChart && 'fixed top-16 left-0 right-0 md:left-auto md:right-auto md:w-screen'
 		]}
 	>
 		<div class="flex justify-between rounded-b-lg">

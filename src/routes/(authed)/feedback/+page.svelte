@@ -10,13 +10,13 @@
 </svelte:head>
 
 <div class="m-4 mt-8 space-y-4">
-	<h1 class="text-2xl font-bold">Feedback</h1>
+	<h1 class="text-2xl font-bold">Feedback & Support</h1>
 
-	<p>If you're experiencing a problem or have suggestions or feedback, please let us know.</p>
+	<p>Have questions or feedback? Reach out to us:</p>
 
 	<div class="flex flex-col gap-4">
-		<Button href="{repoLink}/issues" target="_blank" variant="outline" class="h-auto w-fit">
-			<GithubIcon />Create an issue on GitHub
+		<Button href="{repoLink}" target="_blank" variant="outline" class="h-auto w-fit">
+			<GithubIcon /> View on GitHub
 		</Button>
 
 		<Button href="mailto:{contactEmail}" variant="outline" class="h-auto w-fit">

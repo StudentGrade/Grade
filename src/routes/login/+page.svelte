@@ -9,10 +9,8 @@
 	import * as Alert from '$lib/components/ui/alert';
 	import { Button } from '$lib/components/ui/button';
 	import { Checkbox } from '$lib/components/ui/checkbox';
-	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Field from '$lib/components/ui/field';
 	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
 	import { StudentAccount } from '$lib/synergy';
 	import AlertCircleIcon from '@lucide/svelte/icons/alert-circle';
 	import LogInIcon from '@lucide/svelte/icons/log-in';
@@ -26,7 +24,7 @@
 
 	let username: string = $state('');
 	let password: string = $state('');
-	let domain: string = $state('');
+	const domain = 'wa-nor-psv.edupoint.com';
 
 	let loginError: string | undefined = $state();
 
@@ -58,22 +56,6 @@
 		void goto('/grades');
 	}
 
-	let pastedUrl = $state('');
-	const convertedDomain = $derived.by(() => {
-		try {
-			const url = new URL(pastedUrl);
-			return url.host;
-		} catch {
-			return undefined;
-		}
-	});
-
-	function findDomain() {
-		if (convertedDomain === undefined) return;
-		domain = convertedDomain;
-		domainDialogOpen = false;
-	}
-	let domainDialogOpen = $state(false);
 </script>
 
 <svelte:head>
@@ -94,22 +76,19 @@
 	</div>
 {/if}
 
-<div class="flex min-h-screen flex-col">
+<div class="flex h-screen flex-col overflow-hidden">
 	<main class="flex grow items-center justify-center">
-		<form onsubmit={login} class="m-4 flex w-full max-w-sm flex-col gap-4">
-			<div class="mb-8 flex flex-col items-center gap-2">
-				<img src="/favicon.svg" class="h-8 w-8" alt={brand} />
-
-				<h1 class="text-xl font-bold">Log in to {brand}</h1>
-
-				<Field.Description>
-					Never used {brand} before? <a href="/signup">Sign up</a>
-				</Field.Description>
+		<form onsubmit={login} class="m-4 flex w-full max-w-sm flex-col gap-6 animate-in fade-in slide-in-from-bottom duration-500 border border-white rounded-lg p-8">
+			<!-- Header -->
+			<div class="mb-4 flex flex-col items-center gap-3 animate-in fade-in slide-in-from-top duration-500">
+				<img src="/favicon.svg" class="h-10 w-10 animate-in zoom-in duration-300" alt={brand} />
+				<h1 class="text-3xl font-bold animate-in fade-in duration-500 delay-100">{brand}</h1>
 			</div>
 
-			<Field.Group>
+			<!-- Form Fields -->
+			<Field.Group class="animate-in fade-in slide-in-from-bottom duration-500 delay-200 space-y-5">
 				<Field.Field>
-					<Field.Label for="username">StudentVUE Username</Field.Label>
+					<Field.Label for="username" class="text-sm font-medium">Username</Field.Label>
 					<Input
 						id="username"
 						type="text"
@@ -117,86 +96,33 @@
 						placeholder="student@school.net"
 						autocomplete="username"
 						required
+						class="transition-all duration-300 focus:ring-2 focus:ring-primary/50 cursor-text"
 					/>
 				</Field.Field>
 
 				<Field.Field>
-					<Field.Label for="password">StudentVUE Password</Field.Label>
+					<Field.Label for="password" class="text-sm font-medium">Password</Field.Label>
 					<Input
 						type="password"
 						id="password"
 						bind:value={password}
 						autocomplete="current-password"
 						required
-					/>
-					<Field.Description>
-						Your device connects directly to StudentVUE. We can't see your password or your grades.
-					</Field.Description>
-				</Field.Field>
-
-				<Field.Field>
-					<div class="flex items-center">
-						<Field.Label for="domain">StudentVUE Domain</Field.Label>
-
-						<Dialog.Root bind:open={domainDialogOpen}>
-							<Dialog.Trigger
-								class="text-tertiary-foreground ms-auto inline-block text-sm underline"
-								form="none"
-							>
-								Help me find my domain
-							</Dialog.Trigger>
-
-							<Dialog.Content>
-								<form onsubmit={findDomain} class="space-y-4">
-									<Label for="pastedUrl">
-										Paste any link to your district's StudentVUE website
-									</Label>
-
-									<div class="flex gap-2">
-										<Input
-											id="pastedUrl"
-											type="url"
-											placeholder="https://[your-district]-psv.edupoint.com/Home_PXP2.aspx"
-											bind:value={pastedUrl}
-											required
-										/>
-										<Button type="submit" disabled={convertedDomain === undefined}>Submit</Button>
-									</div>
-								</form>
-							</Dialog.Content>
-						</Dialog.Root>
-					</div>
-
-					<Input
-						type="text"
-						id="domain"
-						placeholder="[your-district]-psv.edupoint.com"
-						autocomplete="on"
-						autocorrect="off"
-						bind:value={domain}
-						required
+						class="transition-all duration-300 focus:ring-2 focus:ring-primary/50 cursor-text"
 					/>
 				</Field.Field>
 
-				<Field.Field orientation="horizontal" class="items-center">
-					<Checkbox name="disclaimer" id="disclaimer" required />
-
-					<Field.Label for="disclaimer" class="text-tertiary-foreground text-xs">
-						I understand that {brand} is an independent, unofficial tool and is not affiliated with or
-						endorsed by Edupoint Educational Systems LLC. Use of StudentVUE is subject to Edupoint Educational
-						Systems LLC's terms of service, and I am responsible for ensuring my use complies with those
-						terms.
-					</Field.Label>
-				</Field.Field>
-
 				<Field.Field>
-					<Button type="submit" class="w-full">
-						<LogInIcon class="h-4 w-4" /> Log in
+					<Button type="submit" class="w-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-base font-semibold h-11">
+						<LogInIcon class="h-4 w-4 mr-2" /> Log In
 					</Button>
 				</Field.Field>
 			</Field.Group>
+
+			<!-- Footer -->
+			<p class="text-xs text-center text-muted-foreground animate-in fade-in duration-500 delay-300">
+				Your credentials stay on your device. We never see your password.
+			</p>
 		</form>
 	</main>
-
-	<Disclaimer />
 </div>

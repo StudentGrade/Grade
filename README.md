@@ -1,8 +1,8 @@
-# GradeCompass
+# StudentGrade
 
-An advanced grade calculator designed to interface with StudentVUE®.
+An advanced grade calculator for you and your friends. Access your StudentVUE® grades with ease.
 
-<sub>StudentVUE is a registered trademark of Edupoint Educational Systems LLC. GradeCompass is not affiliated with or endorsed by Edupoint Educational Systems LLC.</sub>
+<sub>StudentVUE is a registered trademark of Edupoint Educational Systems LLC. StudentGrade is not affiliated with or endorsed by Edupoint Educational Systems LLC.</sub>
 
 ## Developing
 

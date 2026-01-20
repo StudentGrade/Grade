@@ -4,13 +4,14 @@
 	import * as Card from '$lib/components/ui/card';
 </script>
 
-<Card.Root>
-	<Card.Header>
-		<Card.Description>Sign up for {brand}</Card.Description>
-		<Card.Title>How do you sign in to StudentVUE?</Card.Title>
-	</Card.Header>
+<div class="flex h-screen items-center justify-center overflow-hidden p-4">
+	<Card.Root class="border-white">
+		<Card.Header>
+			<Card.Description>Sign up for {brand}</Card.Description>
+			<Card.Title>How do you sign in to StudentVUE?</Card.Title>
+		</Card.Header>
 
-	<Card.Content class="flex flex-wrap gap-2">
+		<Card.Content class="flex flex-wrap gap-2">
 		<Button href="/signup/google" variant="outline" size="lg" class="flex-1">with Google</Button>
 		<Button href="/login" variant="outline" size="lg" class="flex-1">with a password</Button>
 	</Card.Content>
@@ -20,4 +21,5 @@
 			Already used {brand}? <a href="/login" class="text-accent-foreground underline">Log in</a>
 		</p>
 	</Card.Footer>
-</Card.Root>
+	</Card.Root>
+</div>

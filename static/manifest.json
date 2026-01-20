@@ -1,6 +1,6 @@
 {
-	"name": "GradeCompass",
-	"description": "An advanced grade calculator.",
+	"name": "StudentGrade",
+	"description": "An advanced grade calculator for you and your friends.",
 	"start_url": "/grades",
 	"display": "standalone",
 	"background_color": "#111827",
