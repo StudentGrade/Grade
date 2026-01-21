@@ -76,13 +76,24 @@
 	</div>
 {/if}
 
-<div class="flex h-screen flex-col overflow-hidden">
-	<main class="flex grow items-center justify-center">
-		<form onsubmit={login} class="m-4 flex w-full max-w-sm flex-col gap-6 animate-in fade-in slide-in-from-bottom duration-500 border border-white rounded-lg p-8">
+<div class="flex h-screen flex-col overflow-hidden bg-gradient-to-br from-background via-background to-background/80">
+	<!-- Background Decoration -->
+	<div class="fixed inset-0 pointer-events-none overflow-hidden">
+		<div class="absolute top-20 right-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl"></div>
+		<div class="absolute bottom-20 left-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+	</div>
+
+	<main class="flex grow items-center justify-center relative z-10">
+		<form onsubmit={login} class="m-4 flex w-full max-w-sm flex-col gap-8 animate-in fade-in slide-in-from-bottom duration-500 border border-white/20 rounded-2xl p-8 bg-card/50 backdrop-blur-sm shadow-2xl">
 			<!-- Header -->
-			<div class="mb-4 flex flex-col items-center gap-3 animate-in fade-in slide-in-from-top duration-500">
-				<img src="/favicon.svg" class="h-10 w-10 animate-in zoom-in duration-300" alt={brand} />
-				<h1 class="text-3xl font-bold animate-in fade-in duration-500 delay-100">{brand}</h1>
+			<div class="mb-4 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-top duration-500">
+				<div class="p-3 bg-primary/10 rounded-xl border border-primary/20">
+					<img src="/favicon.svg" class="h-12 w-12 animate-in zoom-in duration-300" alt={brand} />
+				</div>
+				<div class="text-center">
+					<h1 class="text-4xl font-bold animate-in fade-in duration-500 delay-100 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">{brand}</h1>
+					<p class="text-sm text-muted-foreground mt-2 animate-in fade-in duration-500 delay-200">Advanced Grade Tracking</p>
+				</div>
 			</div>
 
 			<!-- Form Fields -->
@@ -93,10 +104,10 @@
 						id="username"
 						type="text"
 						bind:value={username}
-						placeholder="student@school.net"
+						placeholder="Enter username"
 						autocomplete="username"
 						required
-						class="transition-all duration-300 focus:ring-2 focus:ring-primary/50 cursor-text"
+						class="transition-all duration-300 focus:ring-2 focus:ring-primary/50 cursor-text bg-background/50 border-white/10"
 					/>
 				</Field.Field>
 
@@ -108,21 +119,33 @@
 						bind:value={password}
 						autocomplete="current-password"
 						required
-						class="transition-all duration-300 focus:ring-2 focus:ring-primary/50 cursor-text"
+						class="transition-all duration-300 focus:ring-2 focus:ring-primary/50 cursor-text bg-background/50 border-white/10"
 					/>
 				</Field.Field>
 
 				<Field.Field>
-					<Button type="submit" class="w-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-base font-semibold h-11">
+					<Button type="submit" class="w-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-base font-semibold h-11 bg-gradient-to-r from-primary to-primary/80 hover:shadow-lg">
 						<LogInIcon class="h-4 w-4 mr-2" /> Log In
 					</Button>
 				</Field.Field>
 			</Field.Group>
 
+			<!-- Divider -->
+			<div class="flex items-center gap-3">
+				<div class="flex-1 h-px bg-white/10"></div>
+				<span class="text-xs text-muted-foreground">Secure Login</span>
+				<div class="flex-1 h-px bg-white/10"></div>
+			</div>
+
 			<!-- Footer -->
-			<p class="text-xs text-center text-muted-foreground animate-in fade-in duration-500 delay-300">
-				Your credentials stay on your device. We never see your password.
-			</p>
+			<div class="space-y-3 text-center animate-in fade-in duration-500 delay-300">
+				<p class="text-xs text-muted-foreground">
+					🔒 Your credentials stay on your device. We never see your password.
+				</p>
+				<p class="text-xs text-muted-foreground">
+					School: <span class="font-semibold text-foreground">wa-nor-psv.edupoint.com</span>
+				</p>
+			</div>
 		</form>
 	</main>
 </div>

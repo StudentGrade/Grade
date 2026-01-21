@@ -15,6 +15,7 @@
 	import CircleXIcon from '@lucide/svelte/icons/circle-x';
 	import CourseButton from './CourseButton.svelte';
 	import ReportPeriodSwitcher from './ReportPeriodSwitcher.svelte';
+	import { fade, scale, slide } from 'svelte/transition';
 
 	const gradebookCatalog = $derived(gradebookState.gradebookCatalog);
 
@@ -80,37 +81,45 @@
 </svelte:head>
 
 {#if activeReportPeriod && activeReportPeriodIndex !== undefined && gradebook}
-	<div class="m-4 space-y-4">
-		<ReportPeriodSwitcher
-			activeName={activeReportPeriod._GradePeriod}
-			activeIndex={activeReportPeriodIndex}
-			reportPeriods={gradebookCatalog?.canonicalReportPeriodEntries ??
-				gradebook.ReportingPeriods.ReportPeriod}
-			switchReportPeriod={(index) => switchReportPeriod({ overrideIndex: index })}
-			hasReportPeriodCached={(index) => gradebookCatalog?.recordCache[index] !== undefined}
-			disabled={gradebookCatalog?.loadingIndex !== undefined}
-			defaultIndex={gradebookCatalog?.defaultIndex}
-		/>
+	<div class="m-4 space-y-6 pb-8 animate-in fade-in duration-500" in:fade={{ duration: 300 }}>
+		<div class="pt-4 animate-in slide-in-from-top-2 duration-500">
+			<ReportPeriodSwitcher
+				activeName={activeReportPeriod._GradePeriod}
+				activeIndex={activeReportPeriodIndex}
+				reportPeriods={gradebookCatalog?.canonicalReportPeriodEntries ??
+					gradebook.ReportingPeriods.ReportPeriod}
+				switchReportPeriod={(index) => switchReportPeriod({ overrideIndex: index })}
+				hasReportPeriodCached={(index) => gradebookCatalog?.recordCache[index] !== undefined}
+				disabled={gradebookCatalog?.loadingIndex !== undefined}
+				defaultIndex={gradebookCatalog?.defaultIndex}
+			/>
+		</div>
 
 		{#if hasNoGrades}
-			<Alert.Root class="mx-auto flex w-fit items-center">
-				<CircleXIcon class="shrink-0" />
-				It looks like you don't have any grades yet in {activeReportPeriod._GradePeriod}.
+			<div in:scale={{ start: 0.95, duration: 300 }}>
+				<Alert.Root class="mx-auto flex w-fit items-center animate-in fade-in slide-in-from-top-3 duration-500">
+					<CircleXIcon class="shrink-0" />
+					It looks like you don't have any grades yet in {activeReportPeriod._GradePeriod}.
 
-				{#if activeReportPeriodIndex > 0}
-					<Button
-						onclick={() => switchReportPeriod({ overrideIndex: activeReportPeriodIndex - 1 })}
-						variant="outline"
-					>
-						View {getReportPeriodName(activeReportPeriodIndex - 1)}
-					</Button>
-				{/if}
-			</Alert.Root>
+					{#if activeReportPeriodIndex > 0}
+						<Button
+							onclick={() => switchReportPeriod({ overrideIndex: activeReportPeriodIndex - 1 })}
+							variant="outline"
+							class="transition-all duration-300 hover:scale-105"
+						>
+							View {getReportPeriodName(activeReportPeriodIndex - 1)}
+						</Button>
+					{/if}
+				</Alert.Root>
+			</div>
 		{/if}
 
-		<ol class="flex flex-col items-center gap-4">
+		<ol class="flex flex-col items-center gap-6">
 			{#each courses as course, index (course._CourseID)}
-				<li class="w-full max-w-3xl">
+				<li 
+					class="w-full max-w-3xl animate-in fade-in slide-in-from-bottom-3 duration-500"
+					style="animation-delay: {index * 50}ms"
+				>
 					<CourseButton
 						{index}
 						name={removeCourseType(course._CourseName)}
@@ -126,14 +135,20 @@
 		</ol>
 
 		{#if courses && totalUnseenAssignments > 0}
-			<Alert.Root class="mx-auto flex w-fit items-center gap-4 shadow-lg/30">
-				<Alert.Title class="tracking-normal">
-					{totalUnseenAssignments} new assignment{totalUnseenAssignments === 1 ? '' : 's'}
-				</Alert.Title>
-				<Button variant="outline" onclick={() => clearAllUnseenAssignments(courses)}>
-					Mark as seen
-				</Button>
-			</Alert.Root>
+			<div in:scale={{ start: 0.95, duration: 400 }}>
+				<Alert.Root class="mx-auto flex w-fit items-center gap-4 shadow-lg/30 animate-in fade-in slide-in-from-bottom-4 duration-500">
+					<Alert.Title class="tracking-normal">
+						{totalUnseenAssignments} new assignment{totalUnseenAssignments === 1 ? '' : 's'}
+					</Alert.Title>
+					<Button 
+						variant="outline" 
+						onclick={() => clearAllUnseenAssignments(courses)}
+						class="transition-all duration-300 hover:scale-105"
+					>
+						Mark as seen
+					</Button>
+				</Alert.Root>
+			</div>
 		{/if}
 	</div>
 {/if}

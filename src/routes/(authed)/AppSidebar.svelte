@@ -158,6 +158,7 @@
 	<div 
 		class="fixed left-0 top-16 w-64 bg-card border-r border-border/30 shadow-lg z-40 max-h-[calc(100vh-4rem)] overflow-y-auto block md:hidden animate-in slide-in-from-left duration-300 ease-out"
 		transition:fade={{ duration: 150 }}
+		onmouseleave={() => isMenuOpen = false}
 	>
 		<!-- Header -->
 		<div class="p-4 border-b border-border/30">

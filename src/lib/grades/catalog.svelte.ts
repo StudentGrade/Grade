@@ -1,7 +1,7 @@
 import { LocalStorageKey } from '$lib';
 import { loadStudentAccount } from '$lib/account.svelte';
 import { parseGradebookXML } from '$lib/synergy';
-import { toast } from 'svelte-sonner';
+import { showNotification } from '$lib/notificationState.svelte';
 import {
 	getGradebookCatalogFromLocalStorage,
 	getGradebookRecord,
@@ -62,14 +62,9 @@ export async function switchReportPeriod({
 
 		if (receivedIndex !== requestedIndex) {
 			if (overrideIndex === undefined) {
-				toast.info(`${gradebook.ReportingPeriod._GradePeriod} is now the default`, {
-					description: `${getReportPeriodName(requestedIndex)} may still be viewable`,
-					duration: 6000
-				});
+				showNotification(`${gradebook.ReportingPeriod._GradePeriod} is now the default`, 'info', 6000);
 			} else {
-				toast.error(`${getReportPeriodName(requestedIndex)} is not available`, {
-					duration: 6000
-				});
+				showNotification(`${getReportPeriodName(requestedIndex)} is not available`, 'error', 6000);
 			}
 		} else {
 			gradebookState.gradebookCatalog.overrideIndex =
@@ -97,10 +92,7 @@ async function getGradebookCatalog() {
 		lsCache = getGradebookCatalogFromLocalStorage();
 	} catch (error) {
 		console.error('Error loading gradebook cache:', error);
-		toast.warning('Failed to load saved gradebook data; refreshing', {
-			description: error instanceof Error ? error.message : String(error),
-			duration: 6000
-		});
+		showNotification('Failed to load saved gradebook data; refreshing', 'error', 6000);
 		localStorage.removeItem(LocalStorageKey.gradebook);
 	}
 
@@ -142,9 +134,10 @@ export async function initializeGradebookCatalog() {
 					`Error loading override report period ${overrideIndex}; reverting to default`,
 					error
 				);
-				toast.error(
+				showNotification(
 					`Failed to load grades from ${getReportPeriodName(overrideIndex)}; loading default period instead`,
-					{ description: error instanceof Error ? error.message : String(error), duration: 6000 }
+					'error',
+					6000
 				);
 
 				await switchReportPeriod();

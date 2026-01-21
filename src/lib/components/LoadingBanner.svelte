@@ -21,3 +21,6 @@
 		</Item.Content>
 	</Item.Root>
 </div>
+<style lang="postcss">
+	/* Export for use as component */
+</style>

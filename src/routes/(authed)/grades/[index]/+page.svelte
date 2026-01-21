@@ -226,40 +226,44 @@
 			pinChart && 'fixed top-16 left-0 right-0 md:left-auto md:right-auto md:w-screen'
 		]}
 	>
-		<div class="flex justify-between rounded-b-lg">
-			<div class="bg-background flex items-center truncate rounded-br-xl px-4 py-2">
-				<span class="truncate text-xl sm:text-2xl">{courseName}</span>
-			</div>
+		{#if !pinChart}
+			<div class="flex justify-between rounded-b-lg">
+				<div class="bg-background flex items-center truncate rounded-br-xl px-4 py-2">
+					<span class="truncate text-xl sm:text-2xl">{courseName}</span>
+				</div>
 
-			<div
-				class="bg-background flex shrink-0 items-center rounded-bl-xl px-4 py-2 text-xl sm:text-2xl"
-			>
-				{#if hypotheticalMode && !categories && !rawGradeCalcMatches}
-					<CircleAlertIcon class="mr-2 h-5 w-5" />
-				{/if}
-				{#if grade !== undefined}
-					<NumberFlow
-						{prefix}
-						value={grade}
-						format={{ style: 'percent', maximumFractionDigits: 3 }}
-						spinTiming={{ duration: 400, easing: numberFlowDefaultEasing }}
-					/>
-				{/if}
+				<div
+					class="bg-background flex shrink-0 items-center rounded-bl-xl px-4 py-2 text-xl sm:text-2xl"
+				>
+					{#if hypotheticalMode && !categories && !rawGradeCalcMatches}
+						<CircleAlertIcon class="mr-2 h-5 w-5" />
+					{/if}
+					{#if grade !== undefined}
+						<NumberFlow
+							{prefix}
+							value={grade}
+							format={{ style: 'percent', maximumFractionDigits: 3 }}
+							spinTiming={{ duration: 400, easing: numberFlowDefaultEasing }}
+						/>
+					{/if}
+				</div>
 			</div>
-		</div>
+		{/if}
 		{#if pinChart}
 			{@render chart()}
 		{/if}
 	</div>
 
 	{#if !rawGradeCalcMatches}
-		<div class="m-4 flex justify-center" in:fade>
+		<div class="mx-6 mt-6 flex justify-center" in:fade>
 			<CalculationError {hypotheticalMode} />
 		</div>
 	{/if}
 
 	{#if !pinChart}
-		{@render chart()}
+		<div class="mx-6 my-6">
+			{@render chart()}
+		</div>
 	{/if}
 
 	{#snippet chart()}
@@ -271,7 +275,7 @@
 		/>
 	{/snippet}
 
-	<div class="m-4 flex min-h-9 flex-wrap items-center gap-4">
+	<div class="mx-6 my-6 flex min-h-9 flex-wrap items-center gap-4">
 		<div class="flex items-center gap-2">
 			<Checkbox
 				bind:checked={hypotheticalMode}
@@ -288,13 +292,13 @@
 			</div>
 		{/if}
 
-		<div class="hidden items-center gap-2 sm:flex">
+		<div class="flex items-center gap-2">
 			<Checkbox bind:checked={pinChart} id="pin-chart" />
 			<Label for="pin-chart">Pin chart to top of screen</Label>
 		</div>
 
 		{#if hypotheticalMode}
-			<div transition:fade={{ duration: 200 }} class="ml-auto flex flex-wrap gap-1">
+			<div transition:fade={{ duration: 200 }} class="ml-auto flex flex-wrap gap-2">
 				<Button variant="card" onclick={initReactiveAssignments}>
 					<RotateCCWIcon class="mr-2 h-4 w-4" />
 					Reset
@@ -318,13 +322,13 @@
 	</div>
 
 	{#if categories && gradeCategories && showCategoryTable}
-		<div class="m-4 flex justify-center" transition:fade={{ duration: 200 }}>
+		<div class="mx-6 my-6 flex justify-center" transition:fade={{ duration: 200 }}>
 			<GradeCategoryTable {gradeCategories} {hypotheticalMode} {pointsByCategory} />
 		</div>
 	{/if}
 
 	{#if hypotheticalMode && showTargetGradeCalculator}
-		<div class="m-4" transition:fade={{ duration: 200 }}>
+		<div class="mx-6 my-6" transition:fade={{ duration: 200 }}>
 			<TargetGradeCalculator
 				initialGradePercentage={roundedGradePercentage}
 				assignments={reactiveAssignments}
@@ -336,7 +340,7 @@
 	{/if}
 
 	{#if synergyAssignments.length > 0 || hypotheticalMode}
-		<div transition:fade={{ duration: 200 }}>
+		<div class="mx-6 my-6" transition:fade={{ duration: 200 }}>
 			<AssignmentTabs
 				{assignments}
 				{reactiveAssignments}
@@ -351,7 +355,7 @@
 		</div>
 	{:else}
 		<div class="flex justify-center">
-			<Alert.Root class="mx-4 w-fit">
+			<Alert.Root class="mx-6 w-fit">
 				<CircleXIcon />
 				<Alert.Title class="line-clamp-none">
 					Looks like this this course doesn't have any assignments yet.
@@ -361,7 +365,7 @@
 	{/if}
 
 	{#if unseenAssignments.length > 0 && !hypotheticalMode}
-		<div transition:fade={{ duration: 200 }} class="sticky bottom-8 mt-4 flex justify-center">
+		<div transition:fade={{ duration: 200 }} class="sticky bottom-8 mx-6 mt-6 flex justify-center">
 			<Alert.Root class="flex w-fit items-center gap-4 shadow-lg/30">
 				<Alert.Title class="tracking-normal">
 					{unseenAssignments.length} new assignment{unseenAssignments.length === 1 ? '' : 's'}
