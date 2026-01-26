@@ -11,7 +11,7 @@ html, body {
 
 :root {
 	--radius: 0.625rem;
-	--background: oklch(0.08 0 0);
+	--background: oklch(0.20 0 0);
 	--foreground: oklch(0.95 0 0);
 	--card: oklch(0.12 0 0);
 	--card-foreground: oklch(0.95 0 0);
@@ -56,7 +56,7 @@ html, body {
 
 .dark {
 	/* Dark Mode - Same as light mode (pure black/grey, no hue) */
-	--background: oklch(0.08 0 0);
+	--background: oklch(0.20 0 0);
 	--foreground: oklch(0.95 0 0);
 	--card: oklch(0.12 0 0);
 	--card-foreground: oklch(0.95 0 0);

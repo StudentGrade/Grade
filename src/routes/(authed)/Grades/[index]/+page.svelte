@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { numberFlowDefaultEasing, removeCourseType, tailwindColors } from '$lib';
+	import { numberFlowDefaultEasing, removeCourseType, tailwindColors, type BadgeColor } from '$lib';
 	import { brand } from '$lib/brand';
 	import * as Alert from '$lib/components/ui/alert';
 	import { Button } from '$lib/components/ui/button';
@@ -27,10 +27,10 @@
 		randomAssignmentID,
 		type ReactiveAssignment,
 		type RealAssignment
-	} from '$lib/grades/assignments';
-	import { getActiveGradebook } from '$lib/grades/gradebook';
-	import { saveSeenAssignmentsToLocalStorage } from '$lib/grades/seenAssignments';
-	import { seenAssignmentIDs } from '$lib/grades/seenAssignments.svelte';
+	} from '$lib/Grades/assignments';
+	import { getActiveGradebook } from '$lib/Grades/gradebook';
+	import { saveSeenAssignmentsToLocalStorage } from '$lib/Grades/seenAssignments';
+	import { seenAssignmentIDs } from '$lib/Grades/seenAssignments.svelte';
 	import CircleAlertIcon from '@lucide/svelte/icons/circle-alert';
 	import CircleXIcon from '@lucide/svelte/icons/circle-x';
 	import Columns3CogIcon from '@lucide/svelte/icons/columns-3-cog';
@@ -175,7 +175,7 @@
 				: undefined
 	);
 	const unseenAssignments = $derived(
-		realAssignments.filter(({ id }) => !seenAssignmentIDs.has(id))
+		realAssignments.filter(({ id }: { id: string }) => !seenAssignmentIDs.has(id))
 	);
 
 	let pinChart = $state(false);
@@ -186,7 +186,7 @@
 	}
 	const gradeCategoryWeightProportions: Map<string, number> | undefined = $derived(
 		gradeCategories
-			? new Map(gradeCategories.map(({ name, weightPercentage }) => [name, weightPercentage / 100]))
+			? new Map(gradeCategories.map(({ name, weightPercentage }: { name: string; weightPercentage: number }) => [name, weightPercentage / 100]))
 			: undefined
 	);
 
@@ -195,22 +195,22 @@
 	);
 
 	const assignmentCategoryNames = $derived(
-		new Set(realAssignments.map((assignment) => assignment.category).toSorted())
+		new Set(realAssignments.map((assignment: { category: string }) => assignment.category).toSorted())
 	);
 
 	const assignmentCategoryColors = $derived(
 		new Map(
-			[...assignmentCategoryNames].map((name, i) => [
+			[...assignmentCategoryNames].map((name: string, i: number) => [
 				name,
 				tailwindColors[(i * 4) % tailwindColors.length]!
 			])
-		)
+		) as Map<string, BadgeColor>
 	);
 
 	let showCategoryTable = $state(false);
 
 	function markSeenAssignments() {
-		realAssignments.forEach(({ id }) => seenAssignmentIDs.add(id));
+		realAssignments.forEach(({ id }: { id: string }) => seenAssignmentIDs.add(id));
 		saveSeenAssignmentsToLocalStorage(seenAssignmentIDs);
 	}
 </script>
@@ -226,40 +226,44 @@
 			pinChart && 'fixed top-16 left-0 right-0 md:left-auto md:right-auto md:w-screen'
 		]}
 	>
-		<div class="flex justify-between rounded-b-lg">
-			<div class="bg-background flex items-center truncate rounded-br-xl px-4 py-2">
-				<span class="truncate text-xl sm:text-2xl">{courseName}</span>
-			</div>
+		{#if !pinChart}
+			<div class="flex justify-between rounded-b-lg">
+				<div class="bg-background flex items-center truncate rounded-br-xl px-4 py-2">
+					<span class="truncate text-xl sm:text-2xl">{courseName}</span>
+				</div>
 
-			<div
-				class="bg-background flex shrink-0 items-center rounded-bl-xl px-4 py-2 text-xl sm:text-2xl"
-			>
-				{#if hypotheticalMode && !categories && !rawGradeCalcMatches}
-					<CircleAlertIcon class="mr-2 h-5 w-5" />
-				{/if}
-				{#if grade !== undefined}
-					<NumberFlow
-						{prefix}
-						value={grade}
-						format={{ style: 'percent', maximumFractionDigits: 3 }}
-						spinTiming={{ duration: 400, easing: numberFlowDefaultEasing }}
-					/>
-				{/if}
+				<div
+					class="bg-background flex shrink-0 items-center rounded-bl-xl px-4 py-2 text-xl sm:text-2xl"
+				>
+					{#if hypotheticalMode && !categories && !rawGradeCalcMatches}
+						<CircleAlertIcon class="mr-2 h-5 w-5" />
+					{/if}
+					{#if grade !== undefined}
+						<NumberFlow
+							{prefix}
+							value={grade}
+							format={{ style: 'percent', maximumFractionDigits: 3 }}
+							spinTiming={{ duration: 400, easing: numberFlowDefaultEasing }}
+						/>
+					{/if}
+				</div>
 			</div>
-		</div>
+		{/if}
 		{#if pinChart}
 			{@render chart()}
 		{/if}
 	</div>
 
 	{#if !rawGradeCalcMatches}
-		<div class="m-4 flex justify-center" in:fade>
+		<div class="mx-6 mt-6 flex justify-center" in:fade>
 			<CalculationError {hypotheticalMode} />
 		</div>
 	{/if}
 
 	{#if !pinChart}
-		{@render chart()}
+		<div class="mx-6 my-6">
+			{@render chart()}
+		</div>
 	{/if}
 
 	{#snippet chart()}
@@ -271,7 +275,7 @@
 		/>
 	{/snippet}
 
-	<div class="m-4 flex min-h-9 flex-wrap items-center gap-4">
+	<div class="mx-6 my-6 flex min-h-9 flex-wrap items-center gap-4">
 		<div class="flex items-center gap-2">
 			<Checkbox
 				bind:checked={hypotheticalMode}
@@ -288,13 +292,13 @@
 			</div>
 		{/if}
 
-		<div class="hidden items-center gap-2 sm:flex">
+		<div class="flex items-center gap-2">
 			<Checkbox bind:checked={pinChart} id="pin-chart" />
 			<Label for="pin-chart">Pin chart to top of screen</Label>
 		</div>
 
 		{#if hypotheticalMode}
-			<div transition:fade={{ duration: 200 }} class="ml-auto flex flex-wrap gap-1">
+			<div transition:fade={{ duration: 200 }} class="ml-auto flex flex-wrap gap-2">
 				<Button variant="card" onclick={initReactiveAssignments}>
 					<RotateCCWIcon class="mr-2 h-4 w-4" />
 					Reset
@@ -318,13 +322,13 @@
 	</div>
 
 	{#if categories && gradeCategories && showCategoryTable}
-		<div class="m-4 flex justify-center" transition:fade={{ duration: 200 }}>
+		<div class="mx-6 my-6 flex justify-center" transition:fade={{ duration: 200 }}>
 			<GradeCategoryTable {gradeCategories} {hypotheticalMode} {pointsByCategory} />
 		</div>
 	{/if}
 
 	{#if hypotheticalMode && showTargetGradeCalculator}
-		<div class="m-4" transition:fade={{ duration: 200 }}>
+		<div class="mx-6 my-6" transition:fade={{ duration: 200 }}>
 			<TargetGradeCalculator
 				initialGradePercentage={roundedGradePercentage}
 				assignments={reactiveAssignments}
@@ -336,7 +340,7 @@
 	{/if}
 
 	{#if synergyAssignments.length > 0 || hypotheticalMode}
-		<div transition:fade={{ duration: 200 }}>
+		<div class="mx-6 my-6" transition:fade={{ duration: 200 }}>
 			<AssignmentTabs
 				{assignments}
 				{reactiveAssignments}
@@ -351,7 +355,7 @@
 		</div>
 	{:else}
 		<div class="flex justify-center">
-			<Alert.Root class="mx-4 w-fit">
+			<Alert.Root class="mx-6 w-fit">
 				<CircleXIcon />
 				<Alert.Title class="line-clamp-none">
 					Looks like this this course doesn't have any assignments yet.
@@ -361,7 +365,7 @@
 	{/if}
 
 	{#if unseenAssignments.length > 0 && !hypotheticalMode}
-		<div transition:fade={{ duration: 200 }} class="sticky bottom-8 mt-4 flex justify-center">
+		<div transition:fade={{ duration: 200 }} class="sticky bottom-8 mx-6 mt-6 flex justify-center">
 			<Alert.Root class="flex w-fit items-center gap-4 shadow-lg/30">
 				<Alert.Title class="tracking-normal">
 					{unseenAssignments.length} new assignment{unseenAssignments.length === 1 ? '' : 's'}

@@ -4,16 +4,18 @@
 	import * as Alert from '$lib/components/ui/alert';
 	import { Button } from '$lib/components/ui/button';
 	import * as Item from '$lib/components/ui/item';
+	import { refreshIndicatorState } from '$lib/refreshIndicator.svelte';
+	import { showLoadingNotification, hideLoadingNotification, notificationState } from '$lib/notificationState.svelte';
 	import {
 		getReportPeriodName,
 		gradebookState,
 		initializeGradebookCatalog,
 		switchReportPeriod
-	} from '$lib/grades/catalog.svelte';
+	} from '$lib/Grades/catalog.svelte';
 	import AlertCircleIcon from '@lucide/svelte/icons/alert-circle';
 	import HistoryIcon from '@lucide/svelte/icons/history';
 	import { onMount } from 'svelte';
-	import { fade, fly } from 'svelte/transition';
+	import { fade, fly, scale, slide } from 'svelte/transition';
 	import GradebookLoadingBanner from './GradebookLoadingBanner.svelte';
 
 	let { children } = $props();
@@ -54,40 +56,45 @@
 	onMount(() => {
 		initializeGradebookCatalog();
 	});
+
+	// Update the refresh indicator state whenever gradebook record changes
+	$effect(() => {
+		if (gradebookRecord?.lastRefresh !== undefined) {
+			refreshIndicatorState.lastRefresh = gradebookRecord.lastRefresh;
+			refreshIndicatorState.canRefresh = loadingIndex === undefined;
+			refreshIndicatorState.onRefresh = refreshGradebook;
+		}
+	});
+
+	// Show/hide loading notification
+	$effect(() => {
+		if ((!gradebookCatalog || loadingIndex !== undefined) && loadingError === undefined) {
+			showLoadingNotification(loadingReportPeriodName || 'Report Period', gradebookCatalog?.receivingData ? 'receiving' : 'pending');
+		} else {
+			hideLoadingNotification();
+		}
+	});
 </script>
 
-{#if (!gradebookCatalog || loadingIndex !== undefined) && loadingError === undefined}
-	<div class="flex justify-center" in:fade out:fly={{ y: '-50%' }}>
-		{#key gradebookCatalog?.receivingData}
-			<GradebookLoadingBanner
-				{loadingReportPeriodName}
-				status={gradebookCatalog?.receivingData ? 'Receiving' : 'Pending'}
-			/>
-		{/key}
-	</div>
-{/if}
-
 {#if gradebookRecord?.lastRefresh !== undefined}
-	<RefreshIndicator
-		canRefresh={loadingIndex === undefined}
-		lastRefresh={gradebookRecord.lastRefresh}
-		refresh={refreshGradebook}
-	/>
+	<!-- RefreshIndicator is now in the Header -->
 {/if}
 
 {#if loadingError !== undefined}
-	<Alert.Root variant="destructive" class="mx-auto w-fit min-w-sm">
-		<AlertCircleIcon />
-		<Alert.Title>An error occurred while loading grades.</Alert.Title>
-		<Alert.Description>
-			{loadingError instanceof Error ? loadingError.message : String(loadingError)}
-		</Alert.Description>
-	</Alert.Root>
+	<div in:slide={{ duration: 400 }} out:slide={{ duration: 300 }}>
+		<Alert.Root variant="destructive" class="mx-auto w-fit min-w-sm m-4 animate-in fade-in slide-in-from-top-2 duration-500">
+			<AlertCircleIcon />
+			<Alert.Title>An error occurred while loading grades.</Alert.Title>
+			<Alert.Description>
+				{loadingError instanceof Error ? loadingError.message : String(loadingError)}
+			</Alert.Description>
+		</Alert.Root>
+	</div>
 {/if}
 
 {#if gradebookCatalog?.overrideIndex !== undefined}
-	<div class="m-4 flex justify-center">
-		<Item.Root variant="outline" size="sm" class="w-full max-w-3xl">
+	<div class="m-4 flex justify-center" in:scale={{ start: 0.95, duration: 300 }} out:scale={{ start: 0.95, duration: 200 }}>
+		<Item.Root variant="outline" size="sm" class="w-full max-w-3xl animate-in fade-in slide-in-from-top-3 duration-500">
 			<Item.Media>
 				<HistoryIcon class="size-5" />
 			</Item.Media>
@@ -104,7 +111,7 @@
 			</Item.Content>
 
 			<Item.Actions>
-				<Button onclick={resetReportPeriodOverride} variant="outline">
+				<Button onclick={resetReportPeriodOverride} variant="outline" class="transition-all duration-300 hover:scale-105">
 					Return to {defaultReportPeriodName}
 				</Button>
 			</Item.Actions>
@@ -112,10 +119,12 @@
 	</div>
 {/if}
 
-<svelte:boundary>
-	{@render children()}
+<div in:fade={{ duration: 400 }}>
+	<svelte:boundary>
+		{@render children()}
 
-	{#snippet failed(error, reset)}
-		<BoundaryFailure {error} {reset} />
-	{/snippet}
-</svelte:boundary>
+		{#snippet failed(error, reset)}
+			<BoundaryFailure {error} {reset} />
+		{/snippet}
+	</svelte:boundary>
+</div>

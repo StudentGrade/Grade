@@ -1,4 +1,4 @@
-import { parseSynergyAssignment, type RealAssignment } from '$lib/grades/assignments';
+import { parseSynergyAssignment, type RealAssignment } from '$lib/Grades/assignments';
 import type { AssignmentEntity } from '$lib/types/Gradebook';
 import { expect, test } from 'bun:test';
 

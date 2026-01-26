@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { gradebookState, switchReportPeriod } from '$lib/grades/catalog.svelte';
-	import { getActiveGradebook } from '$lib/grades/gradebook';
+	import { gradebookState, switchReportPeriod } from '$lib/Grades/catalog.svelte';
+	import { getActiveGradebook } from '$lib/Grades/gradebook';
 	import ReportPeriodSwitcher from '../ReportPeriodSwitcher.svelte';
 
 	const gradebookCatalog = $derived(gradebookState.gradebookCatalog);

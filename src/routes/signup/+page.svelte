@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { brand } from '$lib/brand';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -12,13 +13,13 @@
 		</Card.Header>
 
 		<Card.Content class="flex flex-wrap gap-2">
-		<Button href="/signup/google" variant="outline" size="lg" class="flex-1">with Google</Button>
-		<Button href="/login" variant="outline" size="lg" class="flex-1">with a password</Button>
+		<Button href="{base}/signup/google" variant="outline" size="lg" class="flex-1">with Google</Button>
+		<Button href="{base}/login" variant="outline" size="lg" class="flex-1">with a password</Button>
 	</Card.Content>
 
 	<Card.Footer>
 		<p class="text-muted-foreground text-sm">
-			Already used {brand}? <a href="/login" class="text-accent-foreground underline">Log in</a>
+			Already used {brand}? <a href="{base}/login" class="text-accent-foreground underline">Log in</a>
 		</p>
 	</Card.Footer>
 	</Card.Root>

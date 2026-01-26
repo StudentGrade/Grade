@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { removeCourseType } from '$lib';
 	import { brand } from '$lib/brand';
 	import { Spinner } from '$lib/components/ui/spinner';
-	import { initializeGradebookCatalog } from '$lib/grades/catalog.svelte';
-	import { getActiveGradebook } from '$lib/grades/gradebook';
+	import { initializeGradebookCatalog } from '$lib/Grades/catalog.svelte';
+	import { getActiveGradebook } from '$lib/Grades/gradebook';
 	import AppWindowMacIcon from '@lucide/svelte/icons/app-window-mac';
 	import BellIcon from '@lucide/svelte/icons/bell';
 	import CircleUserIcon from '@lucide/svelte/icons/circle-user';
@@ -133,10 +134,10 @@
 		{/if}
 	</button>
 	<a
-		href="/grades"
+		href="{base}/Grades"
 		class="mr-auto ml-3 flex items-center gap-2 text-xl font-bold tracking-tight whitespace-nowrap text-white animate-in fade-in slide-in-from-left duration-500"
 	>
-		<img src="/favicon.svg" class="size-6" alt={brand} />
+		<img src="{base}/favicon.svg" class="size-6" alt={brand} />
 		{brand}
 	</a>
 </div>
@@ -158,11 +159,12 @@
 	<div 
 		class="fixed left-0 top-16 w-64 bg-card border-r border-border/30 shadow-lg z-40 max-h-[calc(100vh-4rem)] overflow-y-auto block md:hidden animate-in slide-in-from-left duration-300 ease-out"
 		transition:fade={{ duration: 150 }}
+		onmouseleave={() => isMenuOpen = false}
 	>
 		<!-- Header -->
 		<div class="p-4 border-b border-border/30">
 			<div class="flex flex-row items-center gap-2">
-				<img src="/favicon.svg" class="size-6" alt={brand} />
+				<img src="{base}/favicon.svg" class="size-6" alt={brand} />
 				<span class="text-lg font-bold tracking-tight">{brand}</span>
 			</div>
 		</div>

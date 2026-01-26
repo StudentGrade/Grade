@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { brand } from '$lib/brand';
 	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -97,7 +98,7 @@
 			You should receive an email that will contain a link to set your password.
 			<span class="font-bold">This may take a few minutes.</span>
 			Once you've created your password, you can
-			<a href="/login" class="text-foreground underline">log in</a>.
+			<a href="{base}/login" class="text-foreground underline">log in</a>.
 		</p>
 
 		<p>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { getBlobURLFromBase64String } from '$lib';
 	import { acc } from '$lib/account.svelte';
@@ -47,7 +48,7 @@
 		<div class="flex min-h-screen items-center justify-center">
 			<Alert class="block w-fit space-y-2">
 				<h1 class="text-lg">{error}</h1>
-				<Button href="/mail" variant="outline">Return to Mail</Button>
+				<Button href="{base}/mail" variant="outline">Return to Mail</Button>
 			</Alert>
 		</div>
 	{/await}

@@ -10,7 +10,7 @@
 		type Calculable,
 		type CalculableWithCategory,
 		type Category
-	} from '$lib/grades/assignments';
+	} from '$lib/Grades/assignments';
 	import { cn } from '$lib/utils';
 	import { Area, AreaChart, LinearGradient, Points } from 'layerchart';
 	import { SvelteMap } from 'svelte/reactivity';
@@ -36,7 +36,7 @@
 
 			const calculableAssignments = getCalculableAssignmentsWithCategories(assignments);
 
-			calculableAssignments.forEach((assignment) => {
+			calculableAssignments.forEach((assignment: CalculableWithCategory<Assignment>) => {
 				const ms = assignment.date.getTime();
 				const existingAssignments = assignmentsByDate.get(ms) ?? [];
 				assignmentsByDate.set(ms, [...existingAssignments, assignment]);
@@ -68,7 +68,7 @@
 
 			const calculableAssignments = getCalculableAssignments(assignments);
 
-			calculableAssignments.forEach((assignment) => {
+			calculableAssignments.forEach((assignment: Calculable<Assignment>) => {
 				const ms = assignment.date.getTime();
 				const existingAssignments = assignmentsByDate.get(ms) ?? [];
 				assignmentsByDate.set(ms, [...existingAssignments, assignment]);

@@ -19,6 +19,7 @@
 		"@lucide/svelte": "^0.562.0",
 		"@number-flow/svelte": "^0.3.9",
 		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/adapter-vercel": "^6.3.0",
 		"@sveltejs/kit": "^2.50.0",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
@@ -56,5 +57,13 @@
 		"workerDirectory": [
 			"static"
 		]
-	}
+	},
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"]
+    }
+  }
 }

@@ -13,7 +13,7 @@
 		getCalculableAssignmentsWithCategories,
 		type ReactiveAssignment,
 		type TargetGradeCalculatorCategoryDependentOptions
-	} from '$lib/grades/assignments';
+	} from '$lib/Grades/assignments';
 	import SquareDashedMousePointerIcon from '@lucide/svelte/icons/square-dashed-mouse-pointer';
 	import SquareMousePointerIcon from '@lucide/svelte/icons/square-mouse-pointer';
 	import XIcon from '@lucide/svelte/icons/x';
@@ -53,7 +53,7 @@
 			? {
 					hasCategories: true,
 					otherAssignments: getCalculableAssignmentsWithCategories(assignments).filter(
-						({ id }) => id !== targetAssignment?.id
+						({ id }: { id: string }) => id !== targetAssignment?.id
 					),
 					gradeCategoryWeightProportions,
 					assignmentCategoryName: targetAssignment.category
@@ -62,7 +62,7 @@
 				? {
 						hasCategories: false,
 						otherAssignments: getCalculableAssignments(assignments).filter(
-							({ id }) => id !== targetAssignment?.id
+							({ id }: { id: string }) => id !== targetAssignment?.id
 						)
 					}
 				: undefined

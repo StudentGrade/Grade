@@ -10,7 +10,7 @@
 	import * as Popover from '$lib/components/ui/popover';
 	import { Progress } from '$lib/components/ui/progress';
 	import * as Select from '$lib/components/ui/select';
-	import { calculateGradePercentage } from '$lib/grades/assignments';
+	import { calculateGradePercentage } from '$lib/Grades/assignments';
 	import MessageCircleIcon from '@lucide/svelte/icons/message-circle';
 
 	type Props = {

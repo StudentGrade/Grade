@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Item from '$lib/components/ui/item';
 	import * as Table from '$lib/components/ui/table';
-	import { calculateGradePercentage, type Category } from '$lib/grades/assignments';
+	import { calculateGradePercentage, type Category } from '$lib/Grades/assignments';
 
 	interface Props {
 		gradeCategories: Category[];

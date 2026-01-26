@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { brand } from '$lib/brand';
 	import * as Alert from '$lib/components/ui/alert';
@@ -14,7 +15,7 @@
 		<Alert.Title>{page.status} {page.error?.message}</Alert.Title>
 
 		<Alert.Description>
-			<Button href="/" variant="outline">Go home</Button>
+			<Button href="{base}/" variant="outline">Go home</Button>
 		</Alert.Description>
 	</Alert.Root>
 </div>

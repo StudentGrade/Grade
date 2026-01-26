@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { InboxItemListingsMessageXML } from '$lib/types/MailData';
@@ -89,7 +90,7 @@
 
 				{#each attachments ?? [] as attachment (attachment._SmAttachmentGU)}
 					<Button
-						href="/mail/attachment?attachmentGU={attachment._SmAttachmentGU}"
+						href="{base}/mail/attachment?attachmentGU={attachment._SmAttachmentGU}"
 						target="_blank"
 						variant="outline"
 						title="Attachment"

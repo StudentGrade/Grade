@@ -3,43 +3,51 @@ import { Operation, wrapEnvelope } from '$lib/synergy';
 import { XMLParser } from 'fast-xml-parser';
 import { http, HttpResponse } from 'msw';
 
-let attachment: string;
-let attendance: string;
-let document: string;
-let documents: string;
-let gradebook: string;
-let mail: string;
-let studentInfo: string;
+let attachment: string = '';
+let attendance: string = '';
+let document: string = '';
+let documents: string = '';
+let gradebook: string = '';
+let mail: string = '';
+let studentInfo: string = '';
 
-if (import.meta.env.DEV) {
-	const [
-		AttachmentXML,
-		Attendance,
-		DocumentData,
-		Gradebook,
-		StudentDocuments,
-		StudentInfo,
-		SynergyMailDataXML
-	] = (
-		await Promise.all([
-			import('./data/AttachmentXML.xml?raw'),
-			import('./data/Attendance.xml?raw'),
-			import('./data/DocumentData.xml?raw'),
-			import('./data/Gradebook.xml?raw'),
-			import('./data/StudentDocuments.xml?raw'),
-			import('./data/StudentInfo.xml?raw'),
-			import('./data/SynergyMailDataXML.xml?raw')
-		])
-	).map((module) => wrapEnvelope(module.default, Operation.Request));
+async function loadMockData() {
+	if (import.meta.env.DEV) {
+		try {
+			const [
+				AttachmentXML,
+				Attendance,
+				DocumentData,
+				Gradebook,
+				StudentDocuments,
+				StudentInfo,
+				SynergyMailDataXML
+			] = (
+				await Promise.all([
+					import('./data/AttachmentXML.xml?raw'),
+					import('./data/Attendance.xml?raw'),
+					import('./data/DocumentData.xml?raw'),
+					import('./data/Gradebook.xml?raw'),
+					import('./data/StudentDocuments.xml?raw'),
+					import('./data/StudentInfo.xml?raw'),
+					import('./data/SynergyMailDataXML.xml?raw')
+				])
+			).map((module) => wrapEnvelope(module.default, Operation.Request));
 
-	attachment = AttachmentXML!;
-	attendance = Attendance!;
-	document = DocumentData!;
-	documents = StudentDocuments!;
-	gradebook = Gradebook!;
-	mail = SynergyMailDataXML!;
-	studentInfo = StudentInfo!;
+			attachment = AttachmentXML!;
+			attendance = Attendance!;
+			document = DocumentData!;
+			documents = StudentDocuments!;
+			gradebook = Gradebook!;
+			mail = SynergyMailDataXML!;
+			studentInfo = StudentInfo!;
+		} catch (error) {
+			console.warn('Mock data files not found, mocking disabled', error);
+		}
+	}
 }
+
+await loadMockData();
 
 const xmlParser = new XMLParser();
 

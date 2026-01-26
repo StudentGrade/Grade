@@ -540,9 +540,9 @@ export function parseSynergyAssignment(synergyAssignment: AssignmentEntity) {
 			? parseFloat(_PointPossible)
 			: _ScoreMaxValue !== undefined
 				? parseFloat(_ScoreMaxValue)
-				: _Points === 'Points Possible'
+				: _Points === 'Points Possible' || typeof _Points !== 'string'
 					? undefined
-					: parseFloat(_Points.split(' Points Possible')[0]);
+					: parseFloat((_Points?.split(' Points Possible')[0]) ?? '');
 
 	const pointsEarnedIsScaled =
 		_Point !== undefined &&

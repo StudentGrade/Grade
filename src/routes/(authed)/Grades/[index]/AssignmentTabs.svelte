@@ -7,7 +7,7 @@
 		HiddenAssignment,
 		ReactiveAssignment,
 		RealAssignment
-	} from '$lib/grades/assignments';
+	} from '$lib/Grades/assignments';
 	import AssignmentCard from './AssignmentCard.svelte';
 
 	interface Props {
